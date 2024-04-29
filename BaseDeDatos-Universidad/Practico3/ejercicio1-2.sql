@@ -11,23 +11,59 @@ create table Articulos(
 	check (stock_min < stock_max)
 );
 
+-- Ejercicio 1.b
+
+create table municipios(
+	municipio varchar(20) not null primary key,
+	provincia varchar(20) not null
+);
+
+create table personas(
+	dni int not null primary key,
+	nombre varchar(20) not null,
+	apellido varchar(30) not null,
+	edad int not null,
+	municipio varchar(20) not null,
+	constraint FK_personas_municipios foreign key (municipio) references municipios(municipio)
+);
+
+create table contagios(
+	dni int not null,
+	cepa int not null,
+	constraint FK_contagios_personas foreign key (dni) references personas(dni)
+);
+
+create table vacunas(
+	cod_vacuna int not null primary key,
+	nombre varchar(45) check (nombre in ('COVID19', 'FIEBRE AMARILLA', 'DENGUE','BCG')) not null
+);
+
+create table vacunados(
+	dni int not null,
+	cod_vacuna int not null,
+	constraint FK_vacunados_personas foreign key (dni) references personas(dni),
+	constraint FK_vacunados_personas2 foreign key (cod_vacuna) references vacunas(cod_vacuna)
+);
+
+-- Ejercicio 2
+
 insert into Articulos values(1, 'Mayonesa', 250.5, 15, 10, 20, 'Diciembre', '2024-06-15');
 insert into Articulos values(2, 'Savora', 300.75, 19, 12, 20, 'Diciembre', '2024-09-25');
 insert into Articulos values(3, 'Oreo', 1200.5, 10, 10, 22, 'Junio', '2025-10-17');
 insert into Articulos values(4, 'Talco', 3500.25, 12, 15, 30, 'Diciembre', '2024-06-15');
 select * from Articulos;
 
--- Ejercicio 1.b
-create table Vacunas (
-	cod_persona int not null unique primary key,
-	nombre_persona varchar(45) not null,
-	edad int check (edad < 21),
-	nombre_vacuna varchar(45) check (nombre_vacuna in ('COVID19', 'FIEBRE AMARILLA', 'DENGUE','BCG')) not null
-);
+insert into municipios values('Rio Cuarto', 'Cordoba');
+insert into personas values(33348556, 'Liones', 'Messi', 36,'Rio Cuarto');
+insert into contagios values(33348556, 3);
+insert into vacunas values(1, 'COVID19');
+insert into vacunados values(33348556, 1);
 
-insert into Vacunas values(1, 'Lionel Messi', 20, 'COVID19');
-insert into Vacunas values(2, 'Cristiano Ronaldo', 19, 'DENGUE');
-insert into Vacunas values(3, 'Neymar Jr', 14, 'FIEBRE AMARILLA');
-insert into Vacunas values(4, 'Sergio Agüero', 17, 'BCG');
+select * from municipios;
+select * from personas;
+select * from contagios;
+select * from vacunas;
+select * from vacunados;
+
 
 
