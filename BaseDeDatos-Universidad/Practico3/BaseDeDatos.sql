@@ -98,13 +98,6 @@ CREATE TABLE Exhibe(
     CONSTRAINT FK_codigo_funcion_e FOREIGN KEY (codigo_funcion) REFERENCES Funcion(codigo)
 );
 
-CREATE TABLE Proyecta(
-	numero_sala INT NOT NULL,
-    codigo_funcion INT NOT NULL,
-    CONSTRAINT FK_numero_s FOREIGN KEY  (numero_sala) REFERENCES Sala(numero),
-    CONSTRAINT FK_codigo_funcion_p FOREIGN KEY (codigo_funcion) REFERENCES Funcion(codigo)
-);
-
 INSERT INTO Director (nombre, nacionalidad, cantidad_peliculas) VALUES
 ('Justin Lin', 'Taieanés', 6),
 ('James Wan', 'Malayo', 1);
