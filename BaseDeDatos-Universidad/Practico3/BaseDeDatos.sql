@@ -1,11 +1,9 @@
-
-
 CREATE TABLE Director(
 	nombre VARCHAR(50) NOT NULL,
     nacionalidad VARCHAR(20) NOT NULL,
-    cantidad_pelicula INT NOT NULL,
+    cantidad_peliculas INT NOT NULL,
     CONSTRAINT PK_nombre_d PRIMARY KEY (nombre),
-    CONSTRAINT CK_cantidad_pelicula_d CHECK (cantidad_pelicula >= 0)
+    CONSTRAINT CK_cantidad_pelicula_d CHECK (cantidad_peliculas >= 0)
 );
 
 CREATE TABLE Pelicula(
@@ -21,34 +19,30 @@ CREATE TABLE Pelicula(
     duracion TIME NOT NULL,
     url VARCHAR(100) NOT NULL,
     pais_origen VARCHAR(20) NOT NULL,
-    calificacion TCALIFICACION NOT NULL,
+    calificacion VARCHAR(20) NOT NULL DEFAULT 'Apta todo público',
     nombre_director VARCHAR(50) NOT NULL,
     CONSTRAINT PK_identificador PRIMARY KEY (identificador),
     CONSTRAINT CK_identificador CHECK (identificador >= 0),
     CONSTRAINT CK_titulo_original CHECK (titulo_original = UPPER(titulo_original)),
     CONSTRAINT CK_año_produccion CHECK (año_produccion >= 0),
-    CONSTRAINT FK_nombre_director FOREIGN KEY (nombre_director) REFERENCES Director(nombre)
+    CONSTRAINT FK_nombre_director FOREIGN KEY (nombre_director) REFERENCES Director(nombre),
+    CONSTRAINT CK_calificación CHECK (calificacion IN ('+ 13 años', '+ 15 años','+ 18 años'))
 );
-
-CREATE DOMAIN TCALIFICACION AS VARCHAR(20)
-DEFAULT 'Apta todo público'
-CHECK (VALUE IN ('+ 13 años', '+ 15 años', '+ 18 años'))
-NOT NULL;
 
 CREATE TABLE Protagonista(
 	nombre VARCHAR(50) NOT NULL,
     nacionalidad VARCHAR(20) NOT NULL,
-    cantidad_pelicula INT NOT NULL,
+    cantidad_peliculas INT NOT NULL,
     CONSTRAINT PK_nombre_p PRIMARY KEY (nombre),
-    CONSTRAINT CK_cantidad_pelicula_p CHECK (cantidad_pelicula >= 0)
+    CONSTRAINT CK_cantidad_pelicula_p CHECK (cantidad_peliculas >= 0)
 );
 
 CREATE TABLE Reparto(
 	nombre VARCHAR(50) NOT NULL,
     nacionalidad VARCHAR(20) NOT NULL,
-    cantidad_pelicula INT NOT NULL,
+    cantidad_peliculas INT NOT NULL,
     CONSTRAINT PK_nombre_r PRIMARY KEY (nombre),
-    CONSTRAINT CK_cantidad_pelicula_r CHECK (cantidad_pelicula >= 0)
+    CONSTRAINT CK_cantidad_pelicula_r CHECK (cantidad_peliculas >= 0)
 );
 
 CREATE TABLE Actuo(
@@ -64,16 +58,58 @@ CREATE TABLE Participo(
     CONSTRAINT FK_identificador_p_r FOREIGN KEY (identificador_pelicula) REFERENCES Pelicula(identificador),
     CONSTRAINT FK_nombre_reparto FOREIGN KEY (nombre_reparto) REFERENCES Reparto(nombre)
 );
+    
+-- -----------------------INICIO TRIGGER ----------------------------
+DELIMITER $$
 
-CREATE TABLE Funcion(
-	codigo INT NOT NULL,
-    fecha DATE NOT NULL,
-    hora_comienzo TIME NOT NULL,
-    numero_sala INT NOT NULL,
-    CONSTRAINT PK_codigo PRIMARY KEY (codigo),
-    CONSTRAINT CK_codigo CHECK (codigo >= 0),
-    CONSTRAINT FK_numero FOREIGN KEY (numero_sala) REFERENCES Sala(numero)
-);
+CREATE TRIGGER insertar_actuo_despues_de_insertar_pelicula
+AFTER INSERT ON Pelicula
+FOR EACH ROW
+BEGIN
+    INSERT INTO Actuo (identificador_pelicula, nombre_protagonista) VALUES (NEW.identificador, NEW.nombre);
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER insertar_actuo_despues_de_insertar_protagonista
+AFTER INSERT ON Protagonista
+FOR EACH ROW
+BEGIN
+    INSERT INTO Actuo (identificador_pelicula, nombre_protagonista)
+    SELECT identificador, NEW.nombre FROM Pelicula;
+END $$
+
+DELIMITER ;
+
+
+-- -----------------------FIN TRIGGER ----------------------------
+
+-- -----------------------INICIO TRIGGER ----------------------------
+DELIMITER $$
+
+CREATE TRIGGER insertar_participo_despues_de_insertar_pelicula
+AFTER INSERT ON Pelicula
+FOR EACH ROW
+BEGIN
+    INSERT INTO Participo (identificador_pelicula, nombre_reparto) VALUES (NEW.identificador, NEW.nombre);
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER insertar_participo_despues_de_insertar_protagonista
+AFTER INSERT ON Reparto
+FOR EACH ROW
+BEGIN
+    INSERT INTO Participo (identificador_pelicula, nombre_reparto)
+    SELECT identificador, NEW.nombre FROM Pelicula;
+END $$
+
+DELIMITER ;
+-- -----------------------FIN TRIGGER ----------------------------
     
 CREATE TABLE Cine(
 	nombre VARCHAR(50) NOT NULL,
@@ -89,6 +125,16 @@ CREATE TABLE Sala(
     CONSTRAINT PK_numero PRIMARY KEY (numero),
     CONSTRAINT CK_numero CHECK (numero >= 0),
     CONSTRAINT FK_nombre_cine_s FOREIGN KEY (nombre_cine) REFERENCES Cine(nombre)
+);
+
+CREATE TABLE Funcion(
+	codigo INT NOT NULL,
+    fecha DATE NOT NULL,
+    hora_comienzo TIME NOT NULL,
+    numero_sala INT NOT NULL,
+    CONSTRAINT PK_codigo PRIMARY KEY (codigo),
+    CONSTRAINT CK_codigo CHECK (codigo >= 0),
+    CONSTRAINT FK_numero FOREIGN KEY (numero_sala) REFERENCES Sala(numero)
 );
 
 CREATE TABLE Exhibe(
@@ -114,7 +160,7 @@ INSERT INTO Pelicula (identificador, titulo_distribucion, titulo_original, titul
 INSERT INTO Protagonista (nombre, nacionalidad, cantidad_peliculas) VALUES
 ('Vin Diesel', 'Estadounidense', 5),
 ('Paul Walker', 'Estadounidense', 6),
-('Tyrese Gibson', 'Estadounidense' 5),
+('Tyrese Gibson', 'Estadounidense', 5),
 ('Jordana Brewster', 'Panameño', 5);
 
 -- INSERT INTO Reparto (nombre, nacionalidad, cantidad_peliculas) VALUES
