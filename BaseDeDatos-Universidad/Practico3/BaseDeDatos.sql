@@ -7,22 +7,22 @@ CREATE TABLE Personal(
 );
 
 CREATE TABLE Director(
-	nombre VARCHAR(50) NOT NULL,
+	nombre_director VARCHAR(50),
     CONSTRAINT PK_nombre_director FOREIGN KEY (nombre) REFERENCES Personal(nombre)
 );
 
 CREATE TABLE Protagonista(
-	nombre VARCHAR(50) NOT NULL,
+	nombre_protagonista VARCHAR(50),
     CONSTRAINT PK_nombre_p FOREIGN KEY (nombre) REFERENCES Personal(nombre)
 );
 
 CREATE TABLE Reparto(
-	nombre VARCHAR(50) NOT NULL,
+	nombre_reparto VARCHAR(50),
     CONSTRAINT PK_nombre_r FOREIGN KEY (nombre) REFERENCES Personal(nombre)
 );
 
 CREATE TABLE Pelicula(
-	identificador INT NOT NULL,
+	id_pelicula INT NOT NULL,
     titulo_distribucion VARCHAR(50) NOT NULL,
     titulo_original VARCHAR(50) NOT NULL,
     titulo_español VARCHAR(50) NOT NULL,
@@ -35,26 +35,26 @@ CREATE TABLE Pelicula(
     url VARCHAR(100) NOT NULL,
     pais_origen VARCHAR(20) NOT NULL,
     calificacion VARCHAR(20) NOT NULL DEFAULT 'Apta todo público',
-    nombre_director VARCHAR(50) NOT NULL,
-    CONSTRAINT PK_identificador PRIMARY KEY (identificador),
+    nombre_d VARCHAR(50) NOT NULL,
+    CONSTRAINT PK_identificador PRIMARY KEY (id_pelicula),
     CONSTRAINT CK_identificador CHECK (identificador >= 0),
     CONSTRAINT CK_titulo_original CHECK (titulo_original = UPPER(titulo_original)),
     CONSTRAINT CK_año_produccion CHECK (año_produccion >= 0),
-    CONSTRAINT FK_nombre_director FOREIGN KEY (nombre_director) REFERENCES Director(nombre),
+    CONSTRAINT FK_nombre_d FOREIGN KEY (nombre_d) REFERENCES Director(nombre_director),
     CONSTRAINT CK_calificación CHECK (calificacion IN ('+ 13 años', '+ 15 años','+ 18 años'))
 );
 
 CREATE TABLE Actuo(
-	identificador_pelicula INT NOT NULL,
-    nombre_protagonista VARCHAR(50) NOT NULL,
-    CONSTRAINT FK_identificador_p_p FOREIGN KEY (identificador_pelicula) REFERENCES Pelicula(identificador),
+	ident_pelicula INT,
+    nombre_p VARCHAR(50),
+    CONSTRAINT FK_identificador_p_p FOREIGN KEY (ident_pelicula) REFERENCES Pelicula(id_pelicula),
     CONSTRAINT FK_nombre_protagonista FOREIGN KEY (nombre_protagonista) REFERENCES Protagonista(nombre)
 );
 
 CREATE TABLE Participo(
-	identificador_pelicula INT NOT NULL,
-    nombre_reparto VARCHAR(50) NOT NULL,
-    CONSTRAINT FK_identificador_p_r FOREIGN KEY (identificador_pelicula) REFERENCES Pelicula(identificador),
+	ident_pelicula INT NOT NULL,
+    nombre_r VARCHAR(50) NOT NULL,
+    CONSTRAINT FK_identificador_p_r FOREIGN KEY (ident_pelicula) REFERENCES Pelicula(id_pelicula),
     CONSTRAINT FK_nombre_reparto FOREIGN KEY (nombre_reparto) REFERENCES Reparto(nombre)
 );
     
@@ -78,17 +78,12 @@ CREATE TABLE Funcion(
 	codigo INT NOT NULL,
     fecha DATE NOT NULL,
     hora_comienzo TIME NOT NULL,
-    numero_sala INT NOT NULL,
+    numero_sala INT,
+    id_peli INT,
     CONSTRAINT PK_codigo PRIMARY KEY (codigo),
     CONSTRAINT CK_codigo CHECK (codigo >= 0),
-    CONSTRAINT FK_numero FOREIGN KEY (numero_sala) REFERENCES Sala(numero)
-);
-
-CREATE TABLE Exhibe(
-	identificador_pelicula INT NOT NULL,
-    codigo_funcion INT NOT NULL,
-    CONSTRAINT FK_identificador_pelicula FOREIGN KEY  (identificador_pelicula) REFERENCES Pelicula(identificador),
-    CONSTRAINT FK_codigo_funcion_e FOREIGN KEY (codigo_funcion) REFERENCES Funcion(codigo)
+    CONSTRAINT FK_numero FOREIGN KEY (numero_sala) REFERENCES Sala(numero),
+    CONSTRAINT FK_id_peli FOREIGN KEY (id_peli) REFERENCES Pelicula(id_pelicula)
 );
 
 INSERT INTO Personal (nombre, nacionalidad, cantidad_peliculas) VALUES
