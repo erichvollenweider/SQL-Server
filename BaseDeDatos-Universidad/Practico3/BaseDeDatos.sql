@@ -8,17 +8,17 @@ CREATE TABLE Personal(
 
 CREATE TABLE Director(
 	nombre_director VARCHAR(50),
-    CONSTRAINT PK_nombre_director FOREIGN KEY (nombre) REFERENCES Personal(nombre)
+    CONSTRAINT PK_nombre_director FOREIGN KEY (nombre) REFERENCES Personal(nombre) ON DELETE SET NULL
 );
 
 CREATE TABLE Protagonista(
 	nombre_protagonista VARCHAR(50),
-    CONSTRAINT PK_nombre_p FOREIGN KEY (nombre) REFERENCES Personal(nombre)
+    CONSTRAINT PK_nombre_p FOREIGN KEY (nombre) REFERENCES Personal(nombre) ON DELETE SET NULL
 );
 
 CREATE TABLE Reparto(
 	nombre_reparto VARCHAR(50),
-    CONSTRAINT PK_nombre_r FOREIGN KEY (nombre) REFERENCES Personal(nombre)
+    CONSTRAINT PK_nombre_r FOREIGN KEY (nombre) REFERENCES Personal(nombre) ON DELETE SET NULL
 );
 
 CREATE TABLE Pelicula(
@@ -33,7 +33,6 @@ CREATE TABLE Pelicula(
     fecha_estreno DATE NOT NULL,
     duracion TIME NOT NULL,
     url VARCHAR(100) NOT NULL,
-    pais_origen VARCHAR(20) NOT NULL,
     calificacion VARCHAR(20) NOT NULL DEFAULT 'Apta todo público',
     nombre_d VARCHAR(50) NOT NULL,
     CONSTRAINT PK_identificador PRIMARY KEY (id_pelicula),
@@ -44,17 +43,25 @@ CREATE TABLE Pelicula(
     CONSTRAINT CK_calificación CHECK (calificacion IN ('+ 13 años', '+ 15 años','+ 18 años'))
 );
 
+-- CREATE INDEX idx_nombre_director ON Pelicula(nombre_director);
+
+CREATE TABLE MPelicula(
+	id_pelicula INT,
+    paises_origen VARCHAR(20),
+    CONSTRAINT FK_id_pel FOREIGN KEY (id_pelicula) REFERENCES Pelicula(id_pelicula) ON DELETE CASCADE
+);
+
 CREATE TABLE Actuo(
 	ident_pelicula INT,
     nombre_p VARCHAR(50),
-    CONSTRAINT FK_identificador_p_p FOREIGN KEY (ident_pelicula) REFERENCES Pelicula(id_pelicula),
+    CONSTRAINT FK_identificador_p_p FOREIGN KEY (ident_pelicula) REFERENCES Pelicula(id_pelicula) ON DELETE CASCADE,
     CONSTRAINT FK_nombre_protagonista FOREIGN KEY (nombre_protagonista) REFERENCES Protagonista(nombre)
 );
 
 CREATE TABLE Participo(
 	ident_pelicula INT NOT NULL,
     nombre_r VARCHAR(50) NOT NULL,
-    CONSTRAINT FK_identificador_p_r FOREIGN KEY (ident_pelicula) REFERENCES Pelicula(id_pelicula),
+    CONSTRAINT FK_identificador_p_r FOREIGN KEY (ident_pelicula) REFERENCES Pelicula(id_pelicula) ON DELETE CASCADE,
     CONSTRAINT FK_nombre_reparto FOREIGN KEY (nombre_reparto) REFERENCES Reparto(nombre)
 );
     
@@ -71,7 +78,7 @@ CREATE TABLE Sala(
     nombre_cine VARCHAR(50) NOT NULL,
     CONSTRAINT PK_numero PRIMARY KEY (numero),
     CONSTRAINT CK_numero CHECK (numero >= 0),
-    CONSTRAINT FK_nombre_cine_s FOREIGN KEY (nombre_cine) REFERENCES Cine(nombre)
+    CONSTRAINT FK_nombre_cine_s FOREIGN KEY (nombre_cine) REFERENCES Cine(nombre) ON DELETE CASCADE
 );
 
 CREATE TABLE Funcion(
@@ -112,14 +119,23 @@ INSERT INTO Reparto (nombre) VALUES
 ('Johnny Strong'),
 ('Reggie Lee');
 
-INSERT INTO Pelicula (identificador, titulo_distribucion, titulo_original, titulo_español, genero, idioma_original, año_produccion, resumen, fecha_estreno, duracion, url, pais_origen, calificacion, nombre_director) VALUES
-(1, 'The Fast and The Furious', 'THE FAST AND THE FURIOUS', 'Rápido y Furioso', 'Acción', 'Inglés', 2001, 'Un policía encubierto se infiltra en una subcultura del inframundo de corredores callejeros de Los Ángeles que buscan reventar una red de secuestros, y pronto comienza a cuestionar sus lealtades.', '2001-06-22', '01:47:00', 'http://www.rapidosyfuriosos.com.ar/franchise.php?id=4', 'Estados Unidos', '+ 13 años', 'Justin Lin'),
-(2, '2 Fast 2 Furious', '2 FAST 2 FURIOUS', 'Más Rápidos Más Furiosos', 'Acción', 'Inglés', 2003, 'Cuando el ex policía, Brian O`Conner, es capturado en Miami por su antiguo socio, Bilkins, lo reclutan para acabar con un narcotraficante llamado Carter Verone. O`Connor acepta ayudarlos en los términos de crear su propio equipo. Decide formar equipo con su amigo de la infancia, Roman Pearce.', '2003-06-06', '01:47:00', 'http://www.rapidosyfuriosos.com.ar/franchise.php?id=4', 'Estados Unidos', '+ 13 años', 'Justin Lin'),
-(3, 'The Fast and the Furious: Tokyo Drift', 'THE FAST AND THE FURIOUS: TOKYO DRIFT', 'Rápido y furioso: Reto Tokio', 'Acción', 'Inglés', 2006, 'Sean es un chico que no se adapta a ningún grupo, su única conexión con el mundo son las carreras ilegales, lo que lo ha convertido en el perseguido número uno por la policía. Cuando lo amenazan de cárcel, lo mandan a Japón con su padre. Estando en este país es atraído por el último reto automovilístico que desafía la gravedad: las carreras drift, una mezcla peligrosa de alta velocidad en pistas con curvas muy cerradas y en zigzag. Estas carreras lo llevan a involucrase con la mafia japonesa, el hampa de Tokio y a jugarse la vida.', '2006-06-16', '01:44:00', 'http://www.rapidosyfuriosos.com.ar/franchise.php?id=4', 'Estados Unidos', '+ 13 años', 'Justin Lin'),
-(4, 'Fast & Furious', 'FAST & FURIOUS', 'Rápidos y Furiosos', 'Acción', 'Inglés', '2009', 'Un asesinato obliga a Don Toretto, un ex convicto huido, y al agente Brian O`Conner a volver a Los Ángeles. donde su pelea se reaviva. Pero al tener que enfrentarse a un enemigo común, se ven obligados a formar una alianza incierta si quieren conseguir desbaratar sus planes.', '2009-04-03', '01:47:00', 'http://www.rapidosyfuriosos.com.ar/franchise.php?id=4', 'Estados Unidos', '+ 13 años', 'Justin Lin'),
-(5, 'Fast Five', 'FAST FIVE', 'Rápidos y Furiosos 5in Control', 'Acción', 'Inglés', 2011, 'Luke Hobbs, un duro agente federal acostumbrado a dar caza a todos sus objetivos, debe confiar en su instinto para atraparles y que nadie más se le adelante. De esta forma, él y su equipo se embarcarán en un veloz viaje sin tregua para frenar a los protagonistas de la saga.', '2011-04-29', '02:11:00', 'https://www.imdb.com/title/tt1596343/', 'Estados Unidos', '+ 15 años', 'Justin Lin'),
-(6, 'Fast & Furious 6', 'FAST & FURIOUS 6', 'Rápido y Furioso 6', 'Acción', 'Inglés', 2013, 'Desde que Dom y Brian destruyeron el imperio de un mafioso y se hicieron con cien millones de dólares, se encuentran en paradero desconocido; no pueden regresar a casa porque la ley los persigue. Entretanto, Hobbs ha seguido la pista por una docena de países a una banda de letales conductores mercenarios, cuyo cerebro cuenta con la inestimable ayuda de la sexy Letty, un viejo amor de Dom que éste daba por muerta. La única forma de detenerlos es enfrentarse a ellos en las calles, así que Hobbs le pide a Dom que reúna a su equipo en Londres. ¿Qué obtendrán a cambio? Un indulto para que todos puedan volver a casa con sus familias.', '2013-05-24', '02:10:00', 'https://www.imdb.com/title/tt1905041/', 'Estados Unidos', '+ 15 años', 'Justin Lin'),
-(7, 'Furious 7', 'FURIOUS 7', 'Rápidos y Furiosos 7', 'Acción', 'Inglés', 2015, 'Luego de haber derrotado al terrorista Owen Shaw, Dominic Toretto y sus amigos creían haber dejado la vida ruda atrás. Sin embargo, Deckard Shaw, el hermano de Owen, aparece de pronto para cobrar venganza. Su intención es eliminar al clan que exterminó a su hermano, uno por uno. ', '2015-04-03', '02:20:00', 'https://www.imdb.com/title/tt2820852/', 'Estados Unidos', '+ 15 años', 'James Wan');
+INSERT INTO Pelicula (identificador, titulo_distribucion, titulo_original, titulo_español, genero, idioma_original, año_produccion, resumen, fecha_estreno, duracion, url, calificacion, nombre_director) VALUES
+(1, 'The Fast and The Furious', 'THE FAST AND THE FURIOUS', 'Rápido y Furioso', 'Acción', 'Inglés', 2001, 'Un policía encubierto se infiltra en una subcultura del inframundo de corredores callejeros de Los Ángeles que buscan reventar una red de secuestros, y pronto comienza a cuestionar sus lealtades.', '2001-06-22', '01:47:00', 'http://www.rapidosyfuriosos.com.ar/franchise.php?id=4', '+ 13 años', 'Justin Lin'),
+(2, '2 Fast 2 Furious', '2 FAST 2 FURIOUS', 'Más Rápidos Más Furiosos', 'Acción', 'Inglés', 2003, 'Cuando el ex policía, Brian O`Conner, es capturado en Miami por su antiguo socio, Bilkins, lo reclutan para acabar con un narcotraficante llamado Carter Verone. O`Connor acepta ayudarlos en los términos de crear su propio equipo. Decide formar equipo con su amigo de la infancia, Roman Pearce.', '2003-06-06', '01:47:00', 'http://www.rapidosyfuriosos.com.ar/franchise.php?id=4', '+ 13 años', 'Justin Lin'),
+(3, 'The Fast and the Furious: Tokyo Drift', 'THE FAST AND THE FURIOUS: TOKYO DRIFT', 'Rápido y furioso: Reto Tokio', 'Acción', 'Inglés', 2006, 'Sean es un chico que no se adapta a ningún grupo, su única conexión con el mundo son las carreras ilegales, lo que lo ha convertido en el perseguido número uno por la policía. Cuando lo amenazan de cárcel, lo mandan a Japón con su padre. Estando en este país es atraído por el último reto automovilístico que desafía la gravedad: las carreras drift, una mezcla peligrosa de alta velocidad en pistas con curvas muy cerradas y en zigzag. Estas carreras lo llevan a involucrase con la mafia japonesa, el hampa de Tokio y a jugarse la vida.', '2006-06-16', '01:44:00', 'http://www.rapidosyfuriosos.com.ar/franchise.php?id=4', '+ 13 años', 'Justin Lin'),
+(4, 'Fast & Furious', 'FAST & FURIOUS', 'Rápidos y Furiosos', 'Acción', 'Inglés', '2009', 'Un asesinato obliga a Don Toretto, un ex convicto huido, y al agente Brian O`Conner a volver a Los Ángeles. donde su pelea se reaviva. Pero al tener que enfrentarse a un enemigo común, se ven obligados a formar una alianza incierta si quieren conseguir desbaratar sus planes.', '2009-04-03', '01:47:00', 'http://www.rapidosyfuriosos.com.ar/franchise.php?id=4', '+ 13 años', 'Justin Lin'),
+(5, 'Fast Five', 'FAST FIVE', 'Rápidos y Furiosos 5in Control', 'Acción', 'Inglés', 2011, 'Luke Hobbs, un duro agente federal acostumbrado a dar caza a todos sus objetivos, debe confiar en su instinto para atraparles y que nadie más se le adelante. De esta forma, él y su equipo se embarcarán en un veloz viaje sin tregua para frenar a los protagonistas de la saga.', '2011-04-29', '02:11:00', 'https://www.imdb.com/title/tt1596343/', '+ 15 años', 'Justin Lin'),
+(6, 'Fast & Furious 6', 'FAST & FURIOUS 6', 'Rápido y Furioso 6', 'Acción', 'Inglés', 2013, 'Desde que Dom y Brian destruyeron el imperio de un mafioso y se hicieron con cien millones de dólares, se encuentran en paradero desconocido; no pueden regresar a casa porque la ley los persigue. Entretanto, Hobbs ha seguido la pista por una docena de países a una banda de letales conductores mercenarios, cuyo cerebro cuenta con la inestimable ayuda de la sexy Letty, un viejo amor de Dom que éste daba por muerta. La única forma de detenerlos es enfrentarse a ellos en las calles, así que Hobbs le pide a Dom que reúna a su equipo en Londres. ¿Qué obtendrán a cambio? Un indulto para que todos puedan volver a casa con sus familias.', '2013-05-24', '02:10:00', 'https://www.imdb.com/title/tt1905041/', '+ 15 años', 'Justin Lin'),
+(7, 'Furious 7', 'FURIOUS 7', 'Rápidos y Furiosos 7', 'Acción', 'Inglés', 2015, 'Luego de haber derrotado al terrorista Owen Shaw, Dominic Toretto y sus amigos creían haber dejado la vida ruda atrás. Sin embargo, Deckard Shaw, el hermano de Owen, aparece de pronto para cobrar venganza. Su intención es eliminar al clan que exterminó a su hermano, uno por uno. ', '2015-04-03', '02:20:00', 'https://www.imdb.com/title/tt2820852/', '+ 15 años', 'James Wan');
+
+INSERT INTO MPelicula VALUES
+(1, 'Estados Unidos'),
+(2, 'Estados Unidos'),
+(3, 'Estados Unidos'),
+(4, 'Estados Unidos'),
+(5, 'Estados Unidos'),
+(6, 'Estados Unidos'),
+(7, 'Estados Unidos');
 
 INSERT INTO Actuo (identificador_pelicula, nombre_protagonista) VALUES
 (1,'Vin Diesel'),
@@ -182,46 +198,3 @@ INSERT INTO Exhibe (identificador_pelicula, codigo_funcion) VALUES
 (1, 4),
 (2, 5),
 (1, 6);
-
--- -----------------------INICIO TRIGGER ----------------------------
-DELIMITER $$
-
-CREATE TRIGGER insertar_actuo_despues_de_insertar_pelicula
-AFTER INSERT ON Pelicula
-FOR EACH ROW
-BEGIN
-    INSERT INTO Actuo (identificador_pelicula) VALUES (NEW.identificador);
-END $$
-
-DELIMITER $$
-
-CREATE TRIGGER actualizar_actuo_despues_de_insertar_protagonista
-AFTER INSERT ON Protagonista
-FOR EACH ROW
-BEGIN
-    -- Actualizar la tabla Actuo con el identificador_pelicula correspondiente
-    UPDATE Actuo SET identificador_pelicula = (SELECT identificador FROM Pelicula) WHERE identificador_pelicula IS NULL;
-END $$
-
-DELIMITER ;
--- -----------------------FIN TRIGGER ----------------------------
-
--- -----------------------INICIO TRIGGER ----------------------------
-DELIMITER $$
-CREATE TRIGGER insertar_participo_despues_de_insertar_pelicula
-AFTER INSERT ON Pelicula
-FOR EACH ROW
-BEGIN
-    INSERT INTO Participo (identificador_pelicula) VALUES (NEW.identificador);
-END $$
-DELIMITER ;
-
-DELIMITER $$
-CREATE TRIGGER insertar_participo_despues_de_insertar_protagonista
-AFTER INSERT ON Reparto
-FOR EACH ROW
-BEGIN
-    INSERT INTO Participo (nombre_reparto) VALUES (NEW.nombre);
-END $$
-DELIMITER ;
--- -----------------------FIN TRIGGER ----------------------------
