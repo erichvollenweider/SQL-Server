@@ -104,17 +104,17 @@ INSERT INTO Personal (nombre, nacionalidad, cantidad_peliculas) VALUES
 ('Johnny Strong', 'Estadounidense', 4),
 ('Reggie Lee', 'Filipino', 1);
 
-INSERT INTO Director (nombre) VALUES
+INSERT INTO Director (nombre_director) VALUES
 ('Justin Lin'),
 ('James Wan');
 
-INSERT INTO Protagonista (nombre) VALUES
+INSERT INTO Protagonista (nombre_protagonista) VALUES
 ('Vin Diesel'),
 ('Paul Walker'),
 ('Tyrese Gibson'),
 ('Jordana Brewster');
 
-INSERT INTO Reparto (nombre) VALUES
+INSERT INTO Reparto (nombre_reparto) VALUES
 ('Chad Lindberg'),
 ('Johnny Strong'),
 ('Reggie Lee');
@@ -128,7 +128,7 @@ INSERT INTO Pelicula (identificador, titulo_distribucion, titulo_original, titul
 (6, 'Fast & Furious 6', 'FAST & FURIOUS 6', 'Rápido y Furioso 6', 'Acción', 'Inglés', 2013, 'Desde que Dom y Brian destruyeron el imperio de un mafioso y se hicieron con cien millones de dólares, se encuentran en paradero desconocido; no pueden regresar a casa porque la ley los persigue. Entretanto, Hobbs ha seguido la pista por una docena de países a una banda de letales conductores mercenarios, cuyo cerebro cuenta con la inestimable ayuda de la sexy Letty, un viejo amor de Dom que éste daba por muerta. La única forma de detenerlos es enfrentarse a ellos en las calles, así que Hobbs le pide a Dom que reúna a su equipo en Londres. ¿Qué obtendrán a cambio? Un indulto para que todos puedan volver a casa con sus familias.', '2013-05-24', '02:10:00', 'https://www.imdb.com/title/tt1905041/', '+ 15 años', 'Justin Lin'),
 (7, 'Furious 7', 'FURIOUS 7', 'Rápidos y Furiosos 7', 'Acción', 'Inglés', 2015, 'Luego de haber derrotado al terrorista Owen Shaw, Dominic Toretto y sus amigos creían haber dejado la vida ruda atrás. Sin embargo, Deckard Shaw, el hermano de Owen, aparece de pronto para cobrar venganza. Su intención es eliminar al clan que exterminó a su hermano, uno por uno. ', '2015-04-03', '02:20:00', 'https://www.imdb.com/title/tt2820852/', '+ 15 años', 'James Wan');
 
-INSERT INTO MPelicula VALUES
+INSERT INTO MPelicula (id_pelicula, paises_origen) VALUES
 (1, 'Estados Unidos'),
 (2, 'Estados Unidos'),
 (3, 'Estados Unidos'),
