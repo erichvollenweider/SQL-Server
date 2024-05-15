@@ -8,17 +8,17 @@ CREATE TABLE Personal(
 
 CREATE TABLE Director(
 	nombre_director VARCHAR(50),
-    CONSTRAINT PK_nombre_director FOREIGN KEY (nombre) REFERENCES Personal(nombre) ON DELETE SET NULL
+    CONSTRAINT PK_nombre_director FOREIGN KEY (nombre_director) REFERENCES Personal(nombre) ON DELETE SET NULL
 );
 
 CREATE TABLE Protagonista(
 	nombre_protagonista VARCHAR(50),
-    CONSTRAINT PK_nombre_p FOREIGN KEY (nombre) REFERENCES Personal(nombre) ON DELETE SET NULL
+    CONSTRAINT PK_nombre_p FOREIGN KEY (nombre_protagonista) REFERENCES Personal(nombre) ON DELETE SET NULL
 );
 
 CREATE TABLE Reparto(
 	nombre_reparto VARCHAR(50),
-    CONSTRAINT PK_nombre_r FOREIGN KEY (nombre) REFERENCES Personal(nombre) ON DELETE SET NULL
+    CONSTRAINT PK_nombre_r FOREIGN KEY (nombre_reparto) REFERENCES Personal(nombre) ON DELETE SET NULL
 );
 
 CREATE TABLE Pelicula(
