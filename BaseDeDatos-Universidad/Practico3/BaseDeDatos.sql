@@ -104,6 +104,7 @@ CREATE TABLE Funcion(
 
 CREATE TABLE Auditoria (
 	id_peli INT,
+    fecha_anterior DATE,
     fecha_modificacion DATE,
     CONSTRAINT FK_id_p FOREIGN KEY (id_peli) REFERENCES Pelicula(id_pelicula)
 );
