@@ -104,10 +104,26 @@ CREATE TABLE Funcion(
 
 CREATE TABLE Auditoria (
 	id_peli INT,
-    fecha_anterior DATE,
-    fecha_modificacion DATE,
+    titulo_distribucion VARCHAR(50),
+    fecha_estreno_anterior DATE,
+    fecha_estreno_nueva DATE,
+    fecha_modificacion DATETIME,
     CONSTRAINT FK_id_p FOREIGN KEY (id_peli) REFERENCES Pelicula(id_pelicula)
 );
+
+DELIMITER $$
+
+CREATE TRIGGER after_update_fecha
+AFTER UPDATE ON Pelicula
+FOR EACH ROW
+BEGIN
+	IF (NEW.fecha_estreno <> OLD.fecha_estreno) THEN
+		INSERT INTO Auditoria(id_peli, titulo_distribucion, fecha_estreno_anterior, fecha_estreno_nueva, fecha_modificacion)
+        VALUES (NEW.id_pelicula, NEW.titulo_distribucion, OLD.fecha_estreno, NEW.fecha_estreno, now());
+	END IF;
+END $$
+
+DELIMITER ;
 
 INSERT INTO Personal (nombre, nacionalidad, cantidad_peliculas) VALUES
 ('Justin Lin', 'Taieanés', 6),
@@ -206,4 +222,6 @@ INSERT INTO Funcion (codigo, fecha, hora_comienzo, numero_sala, id_peli) VALUES
 (6, '2024-05-10', '14:00:00', 5, 4),
 (7, '2024-05-15', '15:30:00', 6, 5);
 
-select * from Pelicula;
+UPDATE Pelicula SET fecha_estreno = '2020-06-01' WHERE id_pelicula = 1;
+
+select * from Auditoria;
