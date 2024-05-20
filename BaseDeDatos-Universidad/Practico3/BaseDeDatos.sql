@@ -1,3 +1,6 @@
+CREATE DATABASE ProyectoCMV;
+USE ProyectoCMV;
+
 CREATE TABLE Personal(
 	nombre VARCHAR(50) NOT NULL,
     nacionalidad VARCHAR(20) NOT NULL,
