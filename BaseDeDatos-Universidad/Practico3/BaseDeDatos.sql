@@ -276,33 +276,38 @@ INSERT INTO Funcion (codigo, fecha, hora_comienzo, numero_sala, id_peli) VALUES
 (6, '2024-05-10', '14:00:00', 5, 4),
 (7, '2024-05-15', '15:30:00', 6, 5);
 
-UPDATE Pelicula SET fecha_estreno = '2020-06-01' WHERE id_pelicula = 1;
 
-select * from Auditoria;
-select * from Pelicula where id_pelicula = 1;
+-- Para probar que funciona la auditoria
+-- select * from Auditoria;
+-- select * from Pelicula where id_pelicula = 1;
+-- UPDATE Pelicula SET fecha_estreno = '2020-06-01' WHERE id_pelicula = 1;
 
-INSERT INTO Personal (nombre, nacionalidad, cantidad_peliculas) VALUES
-('Jon Favreau', 'Estadounidense', 1);
+-- Para probar que funciona el dominio de la calificacion de las peliculas
+-- INSERT INTO Pelicula (id_pelicula, titulo_distribucion, titulo_original, titulo_español, genero, idioma_original, año_produccion, resumen, fecha_estreno, duracion, url, calificacion, nombre_d) VALUES
+-- (8, 'Iron Man', 'IRON MAN', 'El hombre de hierro', 'Acción', 'Inglés', 2008, 'Tony Stark es un inventor de armamento brillante que es secuestrado en el extranjero. Sus captores son unos terroristas que le obligan a construir una máquina destructiva pero Tony se construirá una armadura para poder enfrentarse a ellos y escapar.', '2008-04-30', '02:06:00', 'https://www.marvel.com/', '+ 9 años', 'Jon Favreau');
 
-INSERT INTO Director (nombre_director) VALUES
-('Jon Favreau');
 
-INSERT INTO Reparto (nombre_reparto) VALUES
-('Jon Favreau');
+-- Para probar los DELETE SET NULL y DELETE ON CASCADE
+-- INSERT INTO Personal (nombre, nacionalidad, cantidad_peliculas) VALUES
+-- ('Jon Favreau', 'Estadounidense', 1);
 
-INSERT INTO Pelicula (id_pelicula, titulo_distribucion, titulo_original, titulo_español, genero, idioma_original, año_produccion, resumen, fecha_estreno, duracion, url, calificacion, nombre_d) VALUES
-(8, 'Iron Man', 'IRON MAN', 'El hombre de hierro', 'Acción', 'Inglés', 2008, 'Tony Stark es un inventor de armamento brillante que es secuestrado en el extranjero. Sus captores son unos terroristas que le obligan a construir una máquina destructiva pero Tony se construirá una armadura para poder enfrentarse a ellos y escapar.', '2008-04-30', '02:06:00', 'https://www.marvel.com/', '+ 15 años', 'Jon Favreau');
+-- INSERT INTO Director (nombre_director) VALUES
+-- ('Jon Favreau');
 
-INSERT INTO Participo (ident_pelicula, nombre_r) VALUES
-(8, 'Jon Favreau');
+-- INSERT INTO Reparto (nombre_reparto) VALUES
+-- Jon Favreau');
 
-SELECT * FROM Personal;
-SELECT * FROM Director;
-SELECT * FROM Reparto;
+-- INSERT INTO Pelicula (id_pelicula, titulo_distribucion, titulo_original, titulo_español, genero, idioma_original, año_produccion, resumen, fecha_estreno, duracion, url, calificacion, nombre_d) VALUES
+-- (8, 'Iron Man', 'IRON MAN', 'El hombre de hierro', 'Acción', 'Inglés', 2008, 'Tony Stark es un inventor de armamento brillante que es secuestrado en el extranjero. Sus captores son unos terroristas que le obligan a construir una máquina destructiva pero Tony se construirá una armadura para poder enfrentarse a ellos y escapar.', '2008-04-30', '02:06:00', 'https://www.marvel.com/', '+ 15 años', 'Jon Favreau');
 
-DELETE FROM Personal WHERE nombre = 'Jon Favreau';
+-- INSERT INTO Participo (ident_pelicula, nombre_r) VALUES
+-- (8, 'Jon Favreau');
 
-SELECT * FROM Pelicula;
-SELECT * FROM Participo;
+-- SELECT * FROM Personal;
+-- SELECT * FROM Director;
+-- SELECT * FROM Reparto;
+-- DELETE FROM Personal WHERE nombre = 'Jon Favreau';
 
-DELETE FROM Pelicula WHERE id_pelicula = 8;
+-- SELECT * FROM Pelicula;
+-- SELECT * FROM Participo;
+-- DELETE FROM Pelicula WHERE id_pelicula = 8;
